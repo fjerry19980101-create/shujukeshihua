@@ -1,0 +1,16 @@
+{
+  "order": "(2, 1, 2)",
+  "seasonal_order": "(0, 1, 1, 13)",
+  "aic": 1170.26,
+  "train_weeks": 77,
+  "test_weeks": 8,
+  "mape_pct": 22.233,
+  "rmse": 55786.01,
+  "mase": 0.9754,
+  "coverage_pct": 100.0,
+  "adf_p": 0.3999,
+  "kpss_p": 0.01,
+  "d": 1,
+  "period": 13,
+  "ljungbox_p_lag8": 0.9674
+}

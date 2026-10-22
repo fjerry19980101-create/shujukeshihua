@@ -1,0 +1,2 @@
+﻿n_orders,multi_category_order_pct,min_support_orders,n_rules,rules_lift_gt1,rules_lift_gt1_pct,lift_median,lift_max,conclusion
+98666,0.8,50,1,0,0.0,0.1137,0.1137,basket 结构不存在：多品类订单仅占 0.8%，共现低于随机期望，规则 lift 全部 < 1，不具备捆绑销售的可执行性

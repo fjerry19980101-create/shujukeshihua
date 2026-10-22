@@ -1,0 +1,23 @@
+﻿step,table,rows_before,rows_after,rows_removed,removed_pct,note
+S2 去重,dim_customers,99441,99441,0,0.0,customer_id 为主键，重复即脏数据
+S5 异常+聚合,olist_geolocation,1000163,19010,981153,98.099,"剔除越界点后按邮编中位数聚合（点集 738,299 条 -> 19,010 个邮编坐标）"
+S4 缺失,dim_customers.geo,99441,99162,279,0.281,279 个邮编无地理匹配；保留客户行、坐标留空（仅地图类图剔除）
+S2 去重,dim_products,32951,32951,0,0.0,product_id 为主键
+S4 缺失,dim_products.category,32951,32951,0,0.0,610 条缺失类目标记为 unknown（占 1.85%），不参与品类 Top 排名
+S4 缺失,dim_products.product_weight_g,32951,32951,0,0.0,2 条缺失，按类目中位数插补（次级回退全局中位数）
+S4 缺失,dim_products.product_length_cm,32951,32951,0,0.0,2 条缺失，按类目中位数插补（次级回退全局中位数）
+S4 缺失,dim_products.product_height_cm,32951,32951,0,0.0,2 条缺失，按类目中位数插补（次级回退全局中位数）
+S4 缺失,dim_products.product_width_cm,32951,32951,0,0.0,2 条缺失，按类目中位数插补（次级回退全局中位数）
+S2 去重,dim_sellers,3095,3095,0,0.0,seller_id 为主键
+S2 去重,fact_orders,99441,99441,0,0.0,order_id 为主键
+S3 类型统一,fact_orders.time,99441,99441,0,0.0,5 个时间字段由字符串统一转为 datetime64；无法解析置 NaT
+S5 逻辑校验,fact_orders,99441,99441,0,0.0,审批早于下单 0 条、妥投早于交运 23 条，时间字段置空待补
+S5 异常,fact_orders.duration,99441,99441,0,0.0,0 条负时长置空；另设 180 天上限标记 delivery_is_capped
+S7 派生,fact_orders,99441,99441,0,0.0,派生 delivery_days/estimated_days/delay_days/handover_days/transit_days/is_late；超 180 天 14 条仅标记不删除
+S2 去重,fact_items,112650,112650,0,0.0,"(order_id, order_item_id) 复合主键"
+S5 异常,fact_items.price,112650,112650,0,0.0,删除 price<=0 的 0 条（价格不可能非正）
+S2 去重,fact_payments,103886,103886,0,0.0,完全重复行去重
+S6 聚合,fact_payments,103886,99440,4446,4.28,多笔支付按订单汇总：金额求和、分期取最大、主支付方式取金额最大者
+S2 去重,fact_reviews,99224,98673,551,0.555,"同一订单多条评价保留最新一条（原始 99,224 条 -> 98,673 条）"
+S6 对齐,fact_orders x fact_items,99441,99441,0,0.0,775 个订单无商品明细（多为 canceled/unavailable），保留订单行、金额留空，金额类统计自动剔除
+S8 辅助并入,fact_orders.macro,99441,99441,0,0.0,并入 BCB 月度 IPCA/Selic/USD-BRL，派生 gmv_real（2018-08 不变价）与 gmv_usd

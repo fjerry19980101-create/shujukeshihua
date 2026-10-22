@@ -1,0 +1,360 @@
+{
+  "random_seed": 42,
+  "analysis_window": [
+    "2017-01-01",
+    "2018-08-31"
+  ],
+  "delivery_cap_days": 180,
+  "tables": {
+    "fact_orders": {
+      "rows": 99441,
+      "cols": 48
+    },
+    "fact_items": {
+      "rows": 112650,
+      "cols": 12
+    },
+    "dim_customers": {
+      "rows": 99441,
+      "cols": 7
+    },
+    "dim_products": {
+      "rows": 32951,
+      "cols": 7
+    },
+    "dim_sellers": {
+      "rows": 3095,
+      "cols": 4
+    },
+    "dim_date": {
+      "rows": 774,
+      "cols": 9
+    }
+  },
+  "raw_profile": {
+    "olist_customers_dataset.csv": {
+      "rows": 99441,
+      "cols": 5,
+      "dup_full_row": 0,
+      "missing_cells": 0,
+      "columns": [
+        "customer_id",
+        "customer_unique_id",
+        "customer_zip_code_prefix",
+        "customer_city",
+        "customer_state"
+      ]
+    },
+    "olist_geolocation_dataset.csv": {
+      "rows": 1000163,
+      "cols": 5,
+      "dup_full_row": 261831,
+      "missing_cells": 0,
+      "columns": [
+        "geolocation_zip_code_prefix",
+        "geolocation_lat",
+        "geolocation_lng",
+        "geolocation_city",
+        "geolocation_state"
+      ]
+    },
+    "olist_order_items_dataset.csv": {
+      "rows": 112650,
+      "cols": 7,
+      "dup_full_row": 0,
+      "missing_cells": 0,
+      "columns": [
+        "order_id",
+        "order_item_id",
+        "product_id",
+        "seller_id",
+        "shipping_limit_date",
+        "price",
+        "freight_value"
+      ]
+    },
+    "olist_order_payments_dataset.csv": {
+      "rows": 103886,
+      "cols": 5,
+      "dup_full_row": 0,
+      "missing_cells": 0,
+      "columns": [
+        "order_id",
+        "payment_sequential",
+        "payment_type",
+        "payment_installments",
+        "payment_value"
+      ]
+    },
+    "olist_order_reviews_dataset.csv": {
+      "rows": 99224,
+      "cols": 7,
+      "dup_full_row": 0,
+      "missing_cells": 145903,
+      "columns": [
+        "review_id",
+        "order_id",
+        "review_score",
+        "review_comment_title",
+        "review_comment_message",
+        "review_creation_date",
+        "review_answer_timestamp"
+      ]
+    },
+    "olist_orders_dataset.csv": {
+      "rows": 99441,
+      "cols": 8,
+      "dup_full_row": 0,
+      "missing_cells": 4908,
+      "columns": [
+        "order_id",
+        "customer_id",
+        "order_status",
+        "order_purchase_timestamp",
+        "order_approved_at",
+        "order_delivered_carrier_date",
+        "order_delivered_customer_date",
+        "order_estimated_delivery_date"
+      ]
+    },
+    "olist_products_dataset.csv": {
+      "rows": 32951,
+      "cols": 9,
+      "dup_full_row": 0,
+      "missing_cells": 2448,
+      "columns": [
+        "product_id",
+        "product_category_name",
+        "product_name_lenght",
+        "product_description_lenght",
+        "product_photos_qty",
+        "product_weight_g",
+        "product_length_cm",
+        "product_height_cm",
+        "product_width_cm"
+      ]
+    },
+    "olist_sellers_dataset.csv": {
+      "rows": 3095,
+      "cols": 4,
+      "dup_full_row": 0,
+      "missing_cells": 0,
+      "columns": [
+        "seller_id",
+        "seller_zip_code_prefix",
+        "seller_city",
+        "seller_state"
+      ]
+    },
+    "product_category_name_translation.csv": {
+      "rows": 71,
+      "cols": 2,
+      "dup_full_row": 0,
+      "missing_cells": 0,
+      "columns": [
+        "product_category_name",
+        "product_category_name_english"
+      ]
+    }
+  },
+  "audit": [
+    {
+      "step": "S2 去重",
+      "table": "dim_customers",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "customer_id 为主键，重复即脏数据"
+    },
+    {
+      "step": "S5 异常+聚合",
+      "table": "olist_geolocation",
+      "rows_before": 1000163,
+      "rows_after": 19010,
+      "rows_removed": 981153,
+      "removed_pct": 98.099,
+      "note": "剔除越界点后按邮编中位数聚合（点集 738,299 条 -> 19,010 个邮编坐标）"
+    },
+    {
+      "step": "S4 缺失",
+      "table": "dim_customers.geo",
+      "rows_before": 99441,
+      "rows_after": 99162,
+      "rows_removed": 279,
+      "removed_pct": 0.281,
+      "note": "279 个邮编无地理匹配；保留客户行、坐标留空（仅地图类图剔除）"
+    },
+    {
+      "step": "S2 去重",
+      "table": "dim_products",
+      "rows_before": 32951,
+      "rows_after": 32951,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "product_id 为主键"
+    },
+    {
+      "step": "S4 缺失",
+      "table": "dim_products.category",
+      "rows_before": 32951,
+      "rows_after": 32951,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "610 条缺失类目标记为 unknown（占 1.85%），不参与品类 Top 排名"
+    },
+    {
+      "step": "S4 缺失",
+      "table": "dim_products.product_weight_g",
+      "rows_before": 32951,
+      "rows_after": 32951,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "2 条缺失，按类目中位数插补（次级回退全局中位数）"
+    },
+    {
+      "step": "S4 缺失",
+      "table": "dim_products.product_length_cm",
+      "rows_before": 32951,
+      "rows_after": 32951,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "2 条缺失，按类目中位数插补（次级回退全局中位数）"
+    },
+    {
+      "step": "S4 缺失",
+      "table": "dim_products.product_height_cm",
+      "rows_before": 32951,
+      "rows_after": 32951,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "2 条缺失，按类目中位数插补（次级回退全局中位数）"
+    },
+    {
+      "step": "S4 缺失",
+      "table": "dim_products.product_width_cm",
+      "rows_before": 32951,
+      "rows_after": 32951,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "2 条缺失，按类目中位数插补（次级回退全局中位数）"
+    },
+    {
+      "step": "S2 去重",
+      "table": "dim_sellers",
+      "rows_before": 3095,
+      "rows_after": 3095,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "seller_id 为主键"
+    },
+    {
+      "step": "S2 去重",
+      "table": "fact_orders",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "order_id 为主键"
+    },
+    {
+      "step": "S3 类型统一",
+      "table": "fact_orders.time",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "5 个时间字段由字符串统一转为 datetime64；无法解析置 NaT"
+    },
+    {
+      "step": "S5 逻辑校验",
+      "table": "fact_orders",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "审批早于下单 0 条、妥投早于交运 23 条，时间字段置空待补"
+    },
+    {
+      "step": "S5 异常",
+      "table": "fact_orders.duration",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "0 条负时长置空；另设 180 天上限标记 delivery_is_capped"
+    },
+    {
+      "step": "S7 派生",
+      "table": "fact_orders",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "派生 delivery_days/estimated_days/delay_days/handover_days/transit_days/is_late；超 180 天 14 条仅标记不删除"
+    },
+    {
+      "step": "S2 去重",
+      "table": "fact_items",
+      "rows_before": 112650,
+      "rows_after": 112650,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "(order_id, order_item_id) 复合主键"
+    },
+    {
+      "step": "S5 异常",
+      "table": "fact_items.price",
+      "rows_before": 112650,
+      "rows_after": 112650,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "删除 price<=0 的 0 条（价格不可能非正）"
+    },
+    {
+      "step": "S2 去重",
+      "table": "fact_payments",
+      "rows_before": 103886,
+      "rows_after": 103886,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "完全重复行去重"
+    },
+    {
+      "step": "S6 聚合",
+      "table": "fact_payments",
+      "rows_before": 103886,
+      "rows_after": 99440,
+      "rows_removed": 4446,
+      "removed_pct": 4.28,
+      "note": "多笔支付按订单汇总：金额求和、分期取最大、主支付方式取金额最大者"
+    },
+    {
+      "step": "S2 去重",
+      "table": "fact_reviews",
+      "rows_before": 99224,
+      "rows_after": 98673,
+      "rows_removed": 551,
+      "removed_pct": 0.555,
+      "note": "同一订单多条评价保留最新一条（原始 99,224 条 -> 98,673 条）"
+    },
+    {
+      "step": "S6 对齐",
+      "table": "fact_orders x fact_items",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "775 个订单无商品明细（多为 canceled/unavailable），保留订单行、金额留空，金额类统计自动剔除"
+    },
+    {
+      "step": "S8 辅助并入",
+      "table": "fact_orders.macro",
+      "rows_before": 99441,
+      "rows_after": 99441,
+      "rows_removed": 0,
+      "removed_pct": 0.0,
+      "note": "并入 BCB 月度 IPCA/Selic/USD-BRL，派生 gmv_real（2018-08 不变价）与 gmv_usd"
+    }
+  ]
+}

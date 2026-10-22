@@ -1,0 +1,12 @@
+{
+  "source": "Banco Central do Brasil - SGS",
+  "api": "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{code}/dados",
+  "license": "BCB 开放数据（可自由使用，须注明来源）",
+  "fetched_at": "2026-10-22T09:40:34+08:00",
+  "series": {
+    "433": "IPCA 月度环比（%）",
+    "4189": "Selic 月度累计（%）",
+    "3695": "USD/BRL 月均汇率"
+  },
+  "rows": 28
+}

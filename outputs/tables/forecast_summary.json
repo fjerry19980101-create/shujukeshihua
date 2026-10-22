@@ -1,0 +1,10 @@
+{
+  "horizon_weeks": 12,
+  "forecast_start": "2018-08-27",
+  "forecast_end": "2018-11-12",
+  "total_gmv_point": 2813756.0,
+  "total_gmv_lower95": 945158.0,
+  "total_gmv_upper95": 4682354.0,
+  "weekly_mean_point": 234480.0,
+  "aggregate_band_note": "合计区间由逐周 95% 区间累加得到，属保守包络：周间预测误差正相关（水平不确定性主导），因此真实合计区间通常略窄于此包络，但量级相当"
+}

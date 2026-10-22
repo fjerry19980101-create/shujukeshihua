@@ -1,0 +1,25 @@
+# ---- 数据（体积大，由 01_load.py 一键重建，不入库）----
+data/raw/*.csv
+data/raw/*.zip
+data/clean/*.csv
+data/clean/*.db
+!data/raw/_manifest.json
+!data/clean/_clean_manifest.json
+
+# ---- 环境 ----
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# ---- 临时文件 ----
+.tmp/
+_check_*.png
+_pg*.png
+_preview*.png
+~$*
+
+# ---- 系统 ----
+.DS_Store
+Thumbs.db

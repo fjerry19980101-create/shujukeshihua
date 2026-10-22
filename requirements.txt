@@ -1,0 +1,17 @@
+# -*- mode: python ; coding: utf-8 -*-
+# 依赖清单（Python 3.11+）
+# 安装：pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pandas==2.2.3
+numpy==1.26.4
+scipy==1.13.1
+matplotlib==3.9.2
+seaborn==0.13.2
+plotly==5.24.1
+pyecharts==2.0.6
+statsmodels==0.14.2
+scikit-learn==1.5.2
+mlxtend==0.23.1
+openpyxl==3.1.5
+python-docx==1.2.0
+# 仅用于把大屏 HTML 渲染成截图（可选）
+pymupdf==1.26.0

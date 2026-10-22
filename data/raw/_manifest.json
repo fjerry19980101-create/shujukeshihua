@@ -1,0 +1,55 @@
+{
+  "dataset": "olistbr/brazilian-ecommerce",
+  "homepage": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+  "download_api": "https://www.kaggle.com/api/v1/datasets/download/olistbr/brazilian-ecommerce",
+  "license": "CC BY-NC-SA 4.0",
+  "download_time": "2026-10-22T09:34:10+08:00",
+  "tables": {
+    "olist_customers_dataset.csv": {
+      "rows": 99441,
+      "bytes": 9033957,
+      "sha256": "983a422239e1712d"
+    },
+    "olist_geolocation_dataset.csv": {
+      "rows": 1000163,
+      "bytes": 61273883,
+      "sha256": "b514f6fc991b9566"
+    },
+    "olist_order_items_dataset.csv": {
+      "rows": 112650,
+      "bytes": 15438671,
+      "sha256": "0bc4d068c4fe38cb"
+    },
+    "olist_order_payments_dataset.csv": {
+      "rows": 103886,
+      "bytes": 5777138,
+      "sha256": "4f713964f2815dbb"
+    },
+    "olist_order_reviews_dataset.csv": {
+      "rows": 99224,
+      "bytes": 14451670,
+      "sha256": "012b61c7593e34f5"
+    },
+    "olist_orders_dataset.csv": {
+      "rows": 99441,
+      "bytes": 17654914,
+      "sha256": "8df58ef3d2d7e994"
+    },
+    "olist_products_dataset.csv": {
+      "rows": 32951,
+      "bytes": 2379446,
+      "sha256": "3e6569628a17fbc7"
+    },
+    "olist_sellers_dataset.csv": {
+      "rows": 3095,
+      "bytes": 174703,
+      "sha256": "1f643d2b950373b8"
+    },
+    "product_category_name_translation.csv": {
+      "rows": 71,
+      "bytes": 2613,
+      "sha256": "a81f0d1f27b27e72"
+    }
+  },
+  "total_rows": 1550922
+}

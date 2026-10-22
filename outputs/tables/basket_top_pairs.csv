@@ -1,0 +1,31 @@
+﻿category_x,category_y,n_pair_orders,n_x,n_y,support_pct,expected_orders,cooccur_lift
+bed bath table,furniture decor,70,9417,6449,0.0709,615.5,0.114
+bed bath table,home confort,43,9417,397,0.0436,37.9,1.135
+furniture decor,housewares,24,6449,5884,0.0243,384.6,0.062
+bed bath table,housewares,20,9417,5884,0.0203,561.6,0.036
+baby,cool stuff,20,2885,3632,0.0203,106.2,0.188
+baby,toys,19,2885,3886,0.0193,113.6,0.167
+furniture decor,garden tools,17,6449,3518,0.0172,229.9,0.074
+baby,bed bath table,17,2885,9417,0.0172,275.4,0.062
+health beauty,sports leisure,14,8836,7720,0.0142,691.4,0.02
+housewares,unknown,14,5884,1451,0.0142,86.5,0.162
+furniture decor,home construction,13,6449,490,0.0132,32.0,0.406
+baby,furniture decor,12,2885,6449,0.0122,188.6,0.064
+health beauty,perfumery,12,8836,3162,0.0122,283.2,0.042
+housewares,sports leisure,11,5884,7720,0.0111,460.4,0.024
+garden tools,housewares,11,3518,5884,0.0111,209.8,0.052
+construction tools lights,furniture decor,11,244,6449,0.0111,15.9,0.692
+bed bath table,health beauty,11,9417,8836,0.0111,843.3,0.013
+bed bath table,cool stuff,10,9417,3632,0.0101,346.6,0.029
+computers accessories,garden tools,9,6689,3518,0.0091,238.5,0.038
+fashion bags accessories,unknown,9,1864,1451,0.0091,27.4,0.328
+bed bath table,unknown,8,9417,1451,0.0081,138.5,0.058
+cool stuff,toys,7,3632,3886,0.0071,143.0,0.049
+garden tools,home construction,7,3518,490,0.0071,17.5,0.4
+furniture decor,furniture living room,7,6449,422,0.0071,27.6,0.254
+furniture decor,watches gifts,7,6449,5624,0.0071,367.6,0.019
+sports leisure,unknown,6,7720,1451,0.0061,113.5,0.053
+cool stuff,telephony,6,3632,4199,0.0061,154.6,0.039
+audio,watches gifts,6,350,5624,0.0061,20.0,0.3
+pet shop,unknown,6,1710,1451,0.0061,25.1,0.239
+furniture decor,home confort,6,6449,397,0.0061,25.9,0.232

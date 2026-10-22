@@ -1,0 +1,9 @@
+﻿var_a,var_b,cramers_v,chi2_p_value,n,strength
+late_flag,review_bucket,0.3322,0.000e+00,99092,强
+payment_type,installment_bucket,0.2894,0.000e+00,99092,强
+installment_bucket,price_bucket,0.2041,0.000e+00,99092,中
+payment_type,price_bucket,0.0469,5.585e-175,99092,弱
+main_category,late_flag,0.0419,3.030e-10,99092,弱
+late_flag,region,0.0416,3.421e-39,99092,弱
+price_bucket,review_bucket,0.0361,1.186e-75,99092,弱
+region,review_bucket,0.02,1.207e-08,99092,弱

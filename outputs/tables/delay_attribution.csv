@@ -1,0 +1,3 @@
+﻿group,orders,handover_days_median,transit_days_median,total_days_median,estimated_days_median,review_mean,increment_vs_ontime
+准时,88389,1.78,6.93,9.71,23.28,4.295,
+延迟,7808,3.02,23.9,29.13,22.21,2.565,18.21

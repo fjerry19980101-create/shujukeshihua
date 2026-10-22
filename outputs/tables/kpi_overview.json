@@ -1,0 +1,41 @@
+{
+  "window": [
+    "2017-01-05",
+    "2018-08-31"
+  ],
+  "orders": 99092,
+  "customers": 95774,
+  "gmv_brl": 15941686.23,
+  "gmv_real_brl": 16347969.59,
+  "gmv_usd": 4697851.63,
+  "aov_brl": 160.88,
+  "aov_median_brl": 105.28,
+  "repeat_rate_pct": 3.11,
+  "orders_per_customer": 1.035,
+  "delivered_rate_pct": 97.09,
+  "avg_delivery_days": 12.51,
+  "median_delivery_days": 10.21,
+  "late_rate_pct": 8.12,
+  "avg_delay_days_when_late": 9.27,
+  "review_mean": 4.089,
+  "bad_review_rate_pct": 14.51,
+  "nps": 43.18,
+  "avg_freight_ratio_pct": 20.88,
+  "states": 27,
+  "categories": 74,
+  "review_ontime": 4.295,
+  "review_late": 2.565,
+  "bad_rate_ontime_pct": 9.15,
+  "bad_rate_late_pct": 52.93,
+  "late_orders": 7808,
+  "ontime_orders": 88389,
+  "repeat_customer_share_pct": 3.11,
+  "repeat_gmv_share_pct": 5.88,
+  "repeat_aov_multiple": 1.95,
+  "ytd_2018_vs_2017": {
+    "gmv_yoy_pct": 137.0,
+    "gmv_real_yoy_pct": 129.63,
+    "gmv_usd_yoy_pct": 112.39,
+    "orders_yoy_pct": 135.07
+  }
+}
