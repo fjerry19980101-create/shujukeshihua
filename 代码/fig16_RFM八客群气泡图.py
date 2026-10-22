@@ -13,6 +13,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 
+from matplotlib.lines import Line2D
+
 from _style import ACCENT, CAT, FP, WHITE, chrome, load, new_canvas, note_src, save
 
 COLORS = {"重要价值客户": "#F2B705", "重要唤回客户": "#ED7D31",
@@ -24,23 +26,22 @@ COLORS = {"重要价值客户": "#F2B705", "重要唤回客户": "#ED7D31",
 def main():
     s = load("rfm_segments.csv")
 
-    fig, ax = new_canvas()
+    # 右侧留出图例位置，气泡上只标两个最大的客群，避免标签互相压字
+    fig, ax = new_canvas(plot=(0.095, 0.175, 0.56, 0.50))
     # 逐个指定标签偏移：高价值四群标在上方，低价值四群分列左右，彻底避免压字
-    OFF = {"重要价值客户": (0, 30, "center"), "重要唤回客户": (0, 30, "center"),
-           "重要深耕客户": (0, 34, "center"), "重要挽留客户": (0, 34, "center"),
-           "一般价值客户": (46, 6, "left"), "一般发展客户": (-46, 6, "right"),
-           "一般保持客户": (46, 6, "left"), "一般挽留客户": (-46, 6, "right")}
+    # 两个大泡泡的标签往两侧让，小泡泡在上方/两侧，避免任何压字
 
     for r in s.itertuples():
         ax.scatter(r.avg_recency, r.avg_monetary,
                    s=260 + 2600 * (r.customers / s.customers.max()),
                    color=COLORS.get(r.segment, "#8B90AD"), alpha=0.62,
-                   edgecolors=WHITE, linewidths=0.9, zorder=3)
-        dx, dy, ha = OFF.get(r.segment, (0, 26, "center"))
-        ax.annotate(f"{r.segment}\n{r.customer_share_pct:.1f}% 客户 / {r.gmv_share_pct:.1f}% GMV",
-                    (r.avg_recency, r.avg_monetary), textcoords="offset points",
-                    xytext=(dx, dy), ha=ha, fontsize=9.8, color=WHITE,
-                    fontproperties=FP, zorder=5)
+                   edgecolors=WHITE, linewidths=0.9, zorder=3,
+                   label=f"{r.segment}  {r.customer_share_pct:.1f}% / {r.gmv_share_pct:.1f}%")
+        # 只给两个最大的气泡加直接标注，其余交给图例，避免任何压字
+        if r.segment in ("重要深耕客户", "重要挽留客户"):
+            ax.annotate(r.segment, (r.avg_recency, r.avg_monetary),
+                        textcoords="offset points", xytext=(0, 92), ha="center",
+                        fontsize=11, color=WHITE, fontproperties=FP, zorder=6)
 
     ax.axvline(s.avg_recency.median(), color="#8B90AD", lw=1.0, ls=(0, (5, 4)), zorder=1)
     ax.axhline(s.avg_monetary.median(), color="#8B90AD", lw=1.0, ls=(0, (5, 4)), zorder=1)
@@ -51,6 +52,22 @@ def main():
     ax.set_xlim(-15, s.avg_recency.max() * 1.18)
     ax.set_ylim(0, s.avg_monetary.max() * 1.30)
     ax.tick_params(labelsize=11)
+
+    # 自绘图例句柄（散点自带的图例圆点会跟随气泡尺寸，大到压住文字）
+    handles = [Line2D([], [], marker="o", ls="", markersize=8,
+                      markerfacecolor=COLORS.get(r.segment, "#8B90AD"),
+                      markeredgecolor="white", markeredgewidth=0.6,
+                      label=f"{r.segment}  {r.customer_share_pct:.1f}% / {r.gmv_share_pct:.1f}%")
+               for r in s.sort_values("gmv_share_pct", ascending=False).itertuples()]
+    leg = ax.legend(handles=handles, loc="center left", bbox_to_anchor=(1.02, 0.5),
+                    frameon=False, fontsize=9.5, handletextpad=0.4, labelspacing=0.85,
+                    title="客群  客户占比 / GMV 占比")
+    leg.get_title().set_fontproperties(FP)
+    leg.get_title().set_color(CAT)
+    leg.get_title().set_fontsize(10)
+    for t in leg.get_texts():
+        t.set_fontproperties(FP)
+        t.set_color("#C9D0EE")
 
     key = s.sort_values("gmv_share_pct", ascending=False).head(2)
     chrome(

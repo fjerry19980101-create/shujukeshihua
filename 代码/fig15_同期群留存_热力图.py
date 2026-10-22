@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import LinearSegmentedColormap, LogNorm
 
 from _style import CAT, FP, WHITE, chrome, load, new_canvas, note_src, save
 
@@ -26,7 +26,9 @@ def main():
     vals = m.values.astype(float)
 
     fig, ax = new_canvas(plot=(0.115, 0.20, 0.735, 0.475))
-    im = ax.imshow(vals, aspect="auto", cmap=CMAP, vmin=0, vmax=1.2)
+    # 留存率跨 3 个数量级（100% → 0.1%），必须用对数色标，否则除 M+0 外全糊成黑
+    im = ax.imshow(vals, aspect="auto", cmap=CMAP,
+                   norm=LogNorm(vmin=0.08, vmax=100))
     ax.set_xticks(range(m.shape[1]))
     ax.set_xticklabels(["M+0"] + [f"M+{i}" for i in range(1, m.shape[1])],
                        fontsize=10.5, color=CAT, fontproperties=FP)
@@ -43,7 +45,7 @@ def main():
             if np.isnan(v):
                 continue
             ax.text(j, i, f"{v:.1f}" if j else "100", ha="center", va="center",
-                    fontsize=8.2, color="#0B1020" if v > 0.55 else WHITE,
+                    fontsize=8.0, color="#0B1020" if v > 25 else WHITE,
                     fontproperties=FP)
 
     cb = fig.colorbar(im, ax=ax, fraction=0.020, pad=0.012)
