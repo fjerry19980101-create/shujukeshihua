@@ -6,6 +6,10 @@ data/clean/*.db
 !data/raw/_manifest.json
 !data/clean/_clean_manifest.json
 
+# 明细级客户表（8 MB，可由 03_analysis_rfm.py 重建）
+outputs/tables/rfm_customers.csv
+outputs/tables/repurchase_gap.csv
+
 # ---- 环境 ----
 .venv/
 venv/
