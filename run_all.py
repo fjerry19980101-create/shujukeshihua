@@ -49,6 +49,7 @@ STAGES = {
     ],
     "paper": [
         ("scripts/06_paper.py", "按学院模板生成论文 docx", None),
+        ("scripts/07_build_equations.py", "把线性公式转成 Word 原生公式（需本机 Word）", "warn"),
     ],
 }
 

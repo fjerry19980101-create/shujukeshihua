@@ -300,6 +300,19 @@ def main() -> None:
             h = add_par(doc, blk[1], size=12, bold=True, align=WD_ALIGN_PARAGRAPH.LEFT,
                         indent=False, space_before=8, space_after=4, line=1.5, cn_font="黑体")
             h.paragraph_format.keep_with_next = True
+        elif kind == "eq":
+            # 线性数学文本 + 末尾标记，交给 07_build_equations.py 用 Word 的 BuildUp 转成原生公式
+            q = doc.add_paragraph()
+            q.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            q.paragraph_format.space_before = Pt(6)
+            q.paragraph_format.space_after = Pt(6)
+            q.paragraph_format.line_spacing = 1.2
+            r = q.add_run(blk[1])
+            set_run_font(r, "Cambria Math", "Cambria Math", 11)
+            r2 = q.add_run("      " + blk[2])
+            set_run_font(r2, "宋体", "Times New Roman", 10.5)
+            r3 = q.add_run("⟦EQ⟧")
+            set_run_font(r3, "宋体", "Times New Roman", 4)
         elif kind == "p":
             add_par(doc, blk[1], size=12, indent=True, space_after=3)
         elif kind == "ref":
