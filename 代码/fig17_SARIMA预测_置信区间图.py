@@ -53,7 +53,7 @@ def main():
         "未来 12 周 GMV 点预测 281 万，但区间很宽",
         f"回测 MAPE {sarima.mape_pct:.1f}%、MASE {sarima.mase:.2f}"
         f"（<1 优于朴素预测）；周度噪声大，区间跨度约 ±60%，宜作预算情景而非精确目标",
-        note_src("SARIMA(2,1,2)(0,1,1,13)；95% 区间为逐周区间，合计区间见论文表 4-6"),
+        note_src("SARIMA(2,1,2)(0,1,1,13)；95% 区间为逐周区间，合计区间见论文 4.3.7 节"),
         title_size=27,
     )
     save(fig, "fig17_SARIMA预测_置信区间图.png")

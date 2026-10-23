@@ -100,7 +100,7 @@ def main():
         f"两类客群合计贡献 {vals[0]+vals[1]:.1f}% GMV，"
         f"其中「{names[1]}」平均已沉睡 "
         f"{seg[seg.segment==names[1]].avg_recency.iloc[0]:.0f} 天",
-        note_src("R/M 以中位数二分、F 以 2 单为界（依据见论文 4.3 节）"),
+        note_src("R/M 以中位数二分、F 以 2 单为界（依据见论文 4.2.2 节）"),
         title_size=35, sub_size=21,
     )
     save(fig, "fig12_RFM八客群GMV贡献_玉玦图.png")

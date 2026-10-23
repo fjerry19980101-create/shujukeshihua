@@ -128,6 +128,7 @@ def add_table(doc, caption, header, rows, widths):
     caption = zh(caption)
     cap = add_par(doc, caption, size=10.5, align=WD_ALIGN_PARAGRAPH.CENTER,
                   indent=False, space_before=6, space_after=3, line=1.0)
+    cap.paragraph_format.keep_with_next = True      # 表题不与表格分页
     t = doc.add_table(rows=1, cols=len(header))
     t.alignment = WD_TABLE_ALIGNMENT.CENTER
     # 固定布局 + 100% 页宽，避免 Word 按内容自动收缩导致列过窄、文字碎行
@@ -169,6 +170,12 @@ def add_table(doc, caption, header, rows, widths):
         rp = row._tr.get_or_add_trPr()
         cs = OxmlElement("w:cantSplit")
         rp.append(cs)
+    # 整表不跨页：除最后一行外，所有单元格段落设 keep_with_next，
+    # 迫使 Word 把表格作为一个整体移到下一页，而不是只留一行孤行
+    for row in t.rows[:-1]:
+        for cell in row.cells:
+            for para in cell.paragraphs:
+                para.paragraph_format.keep_with_next = True
     three_line(t)
     add_par(doc, "", size=6, indent=False, line=1.0)
 
@@ -281,11 +288,18 @@ def main() -> None:
         kind = blk[0]
         blk = (blk[0],) + tuple(zh(x) if isinstance(x, str) else x for x in blk[1:3]) + tuple(blk[3:])
         if kind == "h1":
-            add_par(doc, blk[1], size=16, bold=True, align=WD_ALIGN_PARAGRAPH.LEFT,
-                    indent=False, space_before=14, space_after=8, line=1.5, cn_font="黑体")
+            h = add_par(doc, blk[1], size=16, bold=True, align=WD_ALIGN_PARAGRAPH.LEFT,
+                        indent=False, space_before=14, space_after=8, line=1.5, cn_font="黑体")
+            h.paragraph_format.keep_with_next = True
         elif kind == "h2":
-            add_par(doc, blk[1], size=14, bold=True, align=WD_ALIGN_PARAGRAPH.LEFT,
-                    indent=False, space_before=10, space_after=6, line=1.5, cn_font="黑体")
+            h = add_par(doc, blk[1], size=14, bold=True, align=WD_ALIGN_PARAGRAPH.LEFT,
+                        indent=False, space_before=10, space_after=6, line=1.5, cn_font="黑体")
+            h.paragraph_format.keep_with_next = True
+        elif kind == "h3":
+            # 三级标题：小四号黑体、不缩进、段前 8pt
+            h = add_par(doc, blk[1], size=12, bold=True, align=WD_ALIGN_PARAGRAPH.LEFT,
+                        indent=False, space_before=8, space_after=4, line=1.5, cn_font="黑体")
+            h.paragraph_format.keep_with_next = True
         elif kind == "p":
             add_par(doc, blk[1], size=12, indent=True, space_after=3)
         elif kind == "ref":
