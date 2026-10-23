@@ -44,7 +44,10 @@ shujukeshihua/
 │   ├── 02_clean.py          清洗治理 → 星型模型 + SQLite
 │   ├── 03_analysis_*.py     7 个模型脚本（总览/RFM/同期群/BCG/关联/预测/漏斗）
 │   ├── 05_dashboard.py      交互大屏（自包含 HTML）
-│   └── 06_paper.py          按学院模板生成论文 docx
+│   ├── 06_paper.py          按学院模板生成论文 docx（--full 生成完整版）
+│   ├── 07_build_equations.py 8 条公式转 Word 原生 OMML
+│   ├── _paper_content.py    送审版正文源
+│   └── _paper_content_full.py 未删减完整版正文源
 ├── 代码/                    ★ 每张图一份独立脚本（fig01–fig24）
 │   ├── _style.py            统一版式（画布/配色/字体/标题-副标题-注脚）
 │   └── fig*.py              可单独运行，各自产出 outputs/figures 下的一张图
@@ -52,7 +55,7 @@ shujukeshihua/
 │   ├── figures/             24 张 150 dpi 图表
 │   ├── tables/              各模型结果表（论文中所有数字的唯一来源）
 │   └── dashboard/           olist_dashboard.html（1.1 MB，离线可开）+ 截图
-├── docs/                    期末大论文（docx/pdf）、合规声明、图表索引
+├── docs/                    论文送审版 + 完整版（docx/pdf）、合规声明、图表索引
 ├── assets/echarts.min.js    ECharts 5.5（内联进大屏，保证离线可用）
 ├── requirements.txt
 ├── run_all.py               一键复现入口
@@ -95,10 +98,23 @@ python scripts/03_analysis_forecast.py   # 35 组 SARIMA 网格搜索，约 30 �
 python scripts/03_analysis_funnel.py
 python 代码/run_all_figs.py       # 24 张图，约 40 秒
 python scripts/05_dashboard.py    # 生成自包含大屏 HTML
-python scripts/06_paper.py        # 生成论文 docx
+python scripts/06_paper.py        # 生成论文 docx（送审版）
+python scripts/07_build_equations.py   # 8 条公式转 Word 原生 OMML（需本机 Microsoft Word）
+python scripts/06_paper.py --full      # 可选：生成未删减的完整版
 ```
 
-### 4.3 随机性说明
+### 4.3 两个论文版本
+
+同一套版式、同一批图表，正文源不同，互不覆盖：
+
+| 版本 | 文件 | 正文 | 摘要 | 关键词 | 表 | 用途 |
+|---|---|---|---|---|---|---|
+| **送审版**（默认） | `docs/Olist电商用户价值分层与履约流失预警.docx` | 6,615 汉字 | 291 字符 | 5 个 | 8 张（含字段说明、Python/Excel 对比） | 按作业要求逐条对齐，用于提交 |
+| **完整版**（`--full`） | `docs/Olist…_完整版.docx` | 9,222 汉字 | 460 字符 | 6 个 | 6 张 | 保留全部论证细节（阈值敏感性、口径推导、模型取舍的完整推理），用于答辩底稿或扩写 |
+
+两版的差异只在文字取舍：送审版把每个模型的长段论证压成结论句，并把省下的篇幅让给 25 张图的逐图解读；完整版保留原始论证，但不满足"摘要 200–300 字""关键词 3–5 个"等硬性条款。正文源分别是 `scripts/_paper_content.py` 与 `scripts/_paper_content_full.py`。
+
+### 4.4 随机性说明
 
 - 全项目统一 `random_state = 42`（K-Means 初始化、轮廓系数抽样）。
 - **不做抽样**：主表 99,441 行远超课程的 500 行下限，全量使用，抽样偏差为零。

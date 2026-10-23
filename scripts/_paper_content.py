@@ -566,7 +566,7 @@ def build() -> tuple[str, str, str, list[tuple]]:
           ["图5-23", "fig23_州级市场与履约_四象限.png", "业务模型", "地理分层"],
           ["图5-24", "fig24_KMeans分群评估_双面板.png", "业务模型", "K-Means"],
           ["图5-25", "dashboard_preview.png", "交互大屏", "全模型综合"]],
-         [2.0, 8.6, 2.6, 4.4]),
+         [3.0, 7.4, 3.0, 4.2]),
     ]
 
     return TITLE, abstract, keywords, B

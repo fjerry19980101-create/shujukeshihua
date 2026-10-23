@@ -48,15 +48,17 @@ STAGES = {
         ("scripts/05_dashboard.py", "自包含交互大屏 HTML", None),
     ],
     "paper": [
-        ("scripts/06_paper.py", "按学院模板生成论文 docx", None),
+        ("scripts/06_paper.py", "按学院模板生成论文 docx（送审版）", None),
         ("scripts/07_build_equations.py", "把线性公式转成 Word 原生公式（需本机 Word）", "warn"),
+        ("scripts/06_paper.py", "同步生成未删减的完整版", None, ["--full"]),
     ],
 }
 
 ORDER = ["data", "clean", "analysis", "figures", "dashboard", "paper"]
 
 
-def run_one(rel: str, desc: str, tolerate: str | None) -> bool:
+def run_one(rel: str, desc: str, tolerate: str | None,
+            extra: list[str] | None = None) -> bool:
     path = os.path.join(BASE, rel)
     if not os.path.exists(path):
         msg = f"缺少脚本 {rel}"
@@ -67,7 +69,7 @@ def run_one(rel: str, desc: str, tolerate: str | None) -> bool:
         return False
     t0 = time.time()
     print(f"  → {desc}  ({rel})")
-    r = subprocess.run([PY, path], cwd=os.path.dirname(path) or BASE)
+    r = subprocess.run([PY, path] + (extra or []), cwd=os.path.dirname(path) or BASE)
     dt = time.time() - t0
     if r.returncode != 0:
         if tolerate == "warn":
@@ -92,8 +94,10 @@ def main() -> int:
     t_all = time.time()
     for st in stages:
         print(f"\n===== 阶段：{st} =====")
-        for rel, desc, tol in STAGES[st]:
-            if not run_one(rel, desc, tol):
+        for item in STAGES[st]:
+            rel, desc, tol = item[0], item[1], item[2]
+            extra = item[3] if len(item) > 3 else None
+            if not run_one(rel, desc, tol, extra):
                 print("\n中止：请先修复上述错误。")
                 return 1
     print(f"\n全部完成，总耗时 {time.time() - t_all:.1f}s")

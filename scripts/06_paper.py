@@ -16,6 +16,7 @@ from __future__ import annotations
 import copy
 import os
 import shutil
+import sys
 
 from docx import Document
 from docx.enum.section import WD_SECTION
@@ -25,15 +26,27 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
-from _paper_content import build
-
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TPL = os.path.join(BASE, "5、《商业数据分析》 - 期末大作业模板.docx")
 DOCS = os.path.join(BASE, "docs")
 FIG = os.path.join(BASE, "outputs", "figures")
 DASH = os.path.join(BASE, "outputs", "dashboard")
 os.makedirs(DOCS, exist_ok=True)
-OUT = os.path.join(DOCS, "Olist电商用户价值分层与履约流失预警.docx")
+
+# 两个正文源：
+#   _paper_content.py      —— 按作业要求整改后的送审版（摘要 291 字符、5 个关键词、
+#                             新增字段表与 Excel 对比表、25 图逐图解读、正文 6,615 汉字）
+#   _paper_content_full.py —— 压缩前的未删减版（正文 9,222 汉字、7 张表、无公式）
+# 用 `python scripts/06_paper.py --full` 生成完整版，输出文件名带「_完整版」后缀，
+# 两个文件互不覆盖，随时可以对照或回退。
+FULL = "--full" in sys.argv
+if FULL:
+    from _paper_content_full import build
+else:
+    from _paper_content import build
+
+SUFFIX = "_完整版" if FULL else ""
+OUT = os.path.join(DOCS, f"Olist电商用户价值分层与履约流失预警{SUFFIX}.docx")
 
 # 封面信息（可在此处改）
 COVER = {
@@ -270,7 +283,7 @@ def main() -> None:
     ab.paragraph_format.space_after = Pt(4)
     r1 = ab.add_run("摘要：")
     set_run_font(r1, "黑体", "Times New Roman", 14, bold=True)
-    r2 = ab.add_run(abstract)
+    r2 = ab.add_run(zh(abstract))
     set_run_font(r2, "宋体", "Times New Roman", 12)
 
     kw = doc.add_paragraph()
@@ -352,13 +365,26 @@ def main() -> None:
             run._r.append(end)
             set_run_font(run, "宋体", "Times New Roman", 9)
 
-    doc.save(OUT)
+    # 目标文件可能被预览器/Word 以写共享方式占用，直接 save 会 PermissionError；
+    # 先写临时文件，再用 rename 顶替（Windows 上 rename 只要求读共享，不要求写权限）。
+    tmp = os.path.join(DOCS, "_tmp_" + os.path.basename(OUT))
+    doc.save(tmp)
+    prev = OUT + ".prev"
+    if os.path.exists(OUT):
+        try:
+            os.replace(OUT, prev)
+        except PermissionError:
+            pass
+    os.replace(tmp, OUT)
+    if os.path.exists(prev):
+        os.remove(prev)
 
     # 统计字数
-    chars = sum(len(b[1]) for b in blocks if b[0] in ("p", "h1", "h2"))
+    chars = sum(len(b[1]) for b in blocks if b[0] in ("p", "h1", "h2", "h3"))
     nfig = sum(1 for b in blocks if b[0] == "fig")
     ntbl = sum(1 for b in blocks if b[0] == "tbl")
-    print(f"[paper] 已生成 {OUT}")
+    ver = "完整版（未删减）" if FULL else "送审版"
+    print(f"[paper] 已生成 {OUT}（{ver}）")
     print(f"[paper] 正文字数约 {chars:,} 字｜图 {nfig} 张｜表 {ntbl} 张")
 
 
