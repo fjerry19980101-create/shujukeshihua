@@ -18,6 +18,9 @@ __pycache__/
 .ipynb_checkpoints/
 
 # ---- 临时文件 ----
+*副本*
+docs/_tmp_*
+*.prev
 .tmp/
 _check_*.png
 _pg*.png

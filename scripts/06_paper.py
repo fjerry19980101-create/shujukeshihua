@@ -27,7 +27,12 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TPL = os.path.join(BASE, "5、《商业数据分析》 - 期末大作业模板.docx")
+# 根目录的模板文件按提交要求以模板名命名时，内容可能已被最终稿覆盖（本机即是此情况）。
+# 因此生成时优先使用 docs 下的空白模板备份，保证 run_all.py 仍能从零复现；
+# 只有备份不存在时才回落到根目录文件。
+TPL_ORIG = os.path.join(BASE, "5、《商业数据分析》 - 期末大作业模板.docx")
+TPL_BAK = os.path.join(BASE, "docs", "模板备份_期末大作业模板.docx")
+TPL = TPL_BAK if os.path.exists(TPL_BAK) else TPL_ORIG
 DOCS = os.path.join(BASE, "docs")
 FIG = os.path.join(BASE, "outputs", "figures")
 DASH = os.path.join(BASE, "outputs", "dashboard")
@@ -232,10 +237,9 @@ def main() -> None:
     title, abstract, keywords, blocks = build()
 
     # 备份原件，然后复制一份作为工作副本
-    bak = os.path.join(BASE, "docs", "模板备份_期末大作业模板.docx")
-    if not os.path.exists(bak):
-        shutil.copy2(TPL, bak)
-    doc = Document(TPL)
+    if not os.path.exists(TPL_BAK):
+        shutil.copy2(TPL_ORIG, TPL_BAK)
+    doc = Document(TPL_BAK)
 
     # ---- 封面 ----
     for p in doc.paragraphs[:12]:
